@@ -19,7 +19,8 @@ that should have installed all the dependencies
 first you need to run docker for the database with
 
 ````bash
-cd server && docker compose up -d ```
+cd server && docker compose up -d
+```
 
 then run
 
