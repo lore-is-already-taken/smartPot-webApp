@@ -1,0 +1,9 @@
+.Grafico {
+  width: 60%;
+  height: 400px;
+  margin-left: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

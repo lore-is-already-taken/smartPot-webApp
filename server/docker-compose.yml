@@ -1,0 +1,10 @@
+version: "3.9"
+
+# prettier-ignore
+services:
+  db:
+    build: .
+    volumes: 
+      - ./database:/data/db
+    ports: 
+      - "27017:27017"

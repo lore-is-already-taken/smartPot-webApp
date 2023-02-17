@@ -1,0 +1,16 @@
+.MainView {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.graficoView {
+  max-width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.infoView {
+  max-width: 50%;
+}
