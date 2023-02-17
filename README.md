@@ -18,7 +18,7 @@ that should have installed all the dependencies
 
 first you need to run docker for the database with
 
-````bash
+```bash
 cd server && docker compose up -d
 ```
 
@@ -26,7 +26,7 @@ then run
 
 ```bash
 npm run dev
-````
+```
 
 in your **server/** and the **client/** folder to get your app up and running
 
