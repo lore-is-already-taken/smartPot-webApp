@@ -1,58 +1,46 @@
+import { lazy, Suspense } from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter, Navigate, Route } from "react-router-dom";
 import "./App.css";
-import { useEffect, useState } from "react";
-
-import io from "socket.io-client";
-import { Grafico } from "./components/Grafico";
+import { Logout } from "./components/Logout";
 import { NavBar } from "./components/NavBar";
-import ServoButton from "./components/ServoButton";
-import OutlinedCard from "./components/InfoCard";
-import socket from "./config/socket.config";
-import endPoints from "./routes/endpoints";
-import SimpleAccordion from "./components/Accordion";
+import { AuthGuard, RoleGuard } from "./guards";
+import { PrivateRoutes, PublicRoutes, Roles } from "./models";
+import { DashBoard } from "./pages/private/Dashboard";
+import store from "./redux/store";
+import { RoutesWithNotFound } from "./utilities";
 
-interface info {
-  nombre: string;
-  dato: number;
-}
-let temperaturas: Array<info> = [];
-let humedad: Array<info>;
-let humedadSueo: Array<info>;
+const Login = lazy(() => import("./pages/Login/Login"));
+const Private = lazy(() => import("./pages/private/Private"));
 
-const App = () => {
-  const [humidity, setHumidity] = useState("N/A");
-  const [tmp, setTmp] = useState("N/A");
-  const [suelo, setSuelo] = useState("N/A");
-
-  useEffect(() => {
-    socket.on(endPoints.enviromentData, (data) => {
-      setTmp(Number(data.temperature).toFixed(2));
-      setHumidity(Number(data.humidity).toFixed(2));
-      setSuelo(data.soilMoisture);
-    });
-
-    return () => {
-      socket.off("este es el return de connect");
-      socket.off("este es el return dedisconnect");
-      socket.off("este es el return del se me olvido");
-    };
-  }, [socket]);
-
+function App() {
   return (
-    <div>
+    <div className="App">
       <NavBar />
-      <div className="MainView">
-        <div className="graficoView">
-          <Grafico />
-        </div>
-        <div className="infoView">
-          <ServoButton placeHolder="Servo" id="aidi del servo" />
-          <OutlinedCard texto="Temperatura" value={tmp} />
-          <OutlinedCard texto="Humedad" value={humidity} />
-          <OutlinedCard texto="Suelo" value={suelo} />
-        </div>
-      </div>
+      <Suspense fallback={<h1>cargando</h1>}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Logout />
+            <RoutesWithNotFound>
+              <Route
+                path="/"
+                element={<Navigate to={PrivateRoutes.PRIVATE} />}
+              />
+              <Route path={PublicRoutes.LOGIN} element={<Login />} />
+              <Route element={<AuthGuard privateValidation={true} />}>
+                <Route
+                  path={`${PrivateRoutes.PRIVATE}/*`}
+                  element={<Private />}
+                />
+              </Route>
+              <Route element={<RoleGuard rol={Roles.ADMIN} />}>
+                <Route path={PrivateRoutes.DASHBOARD} element={<DashBoard />} />
+              </Route>
+            </RoutesWithNotFound>
+          </BrowserRouter>
+        </Provider>
+      </Suspense>
     </div>
   );
-};
-
+}
 export default App;

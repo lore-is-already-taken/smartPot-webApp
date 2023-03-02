@@ -1,9 +1,7 @@
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material";
 import React from "react";
-
-type ThemeProp = {
-  children: JSX.Element;
-};
 
 enum themePalette {
   BG = "#12181b",
@@ -39,6 +37,10 @@ const theme = createTheme({
     },
   },
 });
+
+type ThemeProp = {
+  children: JSX.Element;
+};
 
 const ThemeConfig: React.FC<ThemeProp> = ({ children }) => {
   return (

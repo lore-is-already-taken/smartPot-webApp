@@ -1,16 +1,22 @@
 .MainView {
-  width: 100%;
+  width: 90%;
   margin: auto;
   display: flex;
   justify-content: space-around;
 }
 
 .graficoView {
-  max-width: 50%;
   display: flex;
   justify-content: center;
 }
 
 .infoView {
-  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 780px) {
+  .MainView {
+    flex-direction: column;
+  }
 }

@@ -1,76 +1,63 @@
-import { Button } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Line,
-  LineChart,
   Tooltip,
   XAxis,
   YAxis,
   CartesianGrid,
   AreaChart,
   Area,
+  Legend,
+  ResponsiveContainer,
 } from "recharts";
+import socket from "../config/socket.config";
 import endPoints from "../routes/endpoints";
 import "./Grafico.css";
 
 const Grafico: React.FC = () => {
-  const [data, setData] = useState([
-    {
-      data: {
-        temperature: String,
-        humidity: String,
-        soilMoisture: String,
-      },
-      dateAdded: { date: String },
-    },
-  ]);
+  const [data, setData] = useState([]);
 
   const getData = async () => {
     await axios
       .get(`http://localhost:8000/${endPoints.graphData}`)
       .then((response) => {
         setData(response.data);
-        console.log(data);
       });
   };
 
-  // prototipo de grafico es:
-  {
-    /*
-     *data = [
-     *{
-     *hola: algo con la hora
-     *temperatura: tmp
-     *humedad: hmd
-     *soilMoisture: tuki
-     *}
-     *]
-     */
-  }
+  useEffect(() => {
+    getData();
+  }, []);
 
-  {
-    /*
-     *<LineChart width={500} height={300} data={data}>
-     *        <XAxis dataKey="{data.map((item) => item.dateAdded.date)}" />
-     *        <YAxis type="number" domain={["auto", "auto "]} />
-     *        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-     *        <Line type="monotone" dataKey="data.temperature" stroke="#82ca9d" />
-     *        <Line type="monotone" dataKey="data.humidity" stroke="#8884d8" />
-     *        <Tooltip />
-     *      </LineChart>
-     *
-     */
-  }
+  useEffect(() => {
+    socket.on("graphInfo", (payload) => {
+      setData((data) => [...data, payload]);
+    });
+
+    return () => {
+      socket.off("hola me cai uwu");
+      socket.off("hola me cai 2 uwu");
+      socket.off("hola me cai 3 uwu");
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (data.length >= 400) {
+      const auxArray = data.map((x) => x);
+      auxArray.splice(0, 1);
+      setData(auxArray);
+    }
+    console.log(data.length);
+  }, [data.length]);
 
   return (
-    <div className="Grafico">
-      <AreaChart
-        width={600}
-        height={300}
-        data={data}
-        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-      >
+    <ResponsiveContainer
+      width={600}
+      minWidth={200}
+      height={300}
+      minHeight={200}
+    >
+      <AreaChart data={data}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
@@ -104,10 +91,9 @@ const Grafico: React.FC = () => {
           fillOpacity={1}
           fill="url(#colorUv)"
         />
+        <Legend />
       </AreaChart>
-
-      <Button onClick={getData}>data</Button>
-    </div>
+    </ResponsiveContainer>
   );
 };
 
