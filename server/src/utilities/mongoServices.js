@@ -26,15 +26,15 @@ const writeInMongo = (data) => {
   };
 
   const enviromentData = new Datos(objectReady);
-  console.log(enviromentData);
 
   enviromentData.save().then(() => console.log("data added to mongo c:"));
+  return objectReady;
 };
 
 const getData = async () => {
   console.log("estan soliicitandomelo");
 
-  const getdata = await Datos.find().sort("-dateAdded.date").limit(50);
+  const getdata = await Datos.find().sort("-dateAdded.date").limit(420);
 
   return getdata;
 };

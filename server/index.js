@@ -30,17 +30,18 @@ client.on("connect", () => {
 
 let LAST_TIME = "";
 client.on("message", (topic, payload) => {
-  //console.log("Received Message:", topic, payload.toString());
   if (topic === smartpotEndpoints.data) {
+    //let WRITE_TIME = new Date().getUTCMinutes();
     const mensaje = JSON.parse(payload.toString());
     io.emit(clientEndpoint.enviromentData, mensaje);
 
-    //let WRITE_TIME = new Date().getUTCMinutes();
     let WRITE_TIME = new Date().getUTCSeconds();
-    if (WRITE_TIME % 1 === 0 && WRITE_TIME !== LAST_TIME) {
+    if (WRITE_TIME % 5 === 0 && WRITE_TIME !== LAST_TIME) {
       LAST_TIME = WRITE_TIME;
 
-      writeInMongo(mensaje);
+      //con esto aca cada segundo se envia un dato
+      const saveData = writeInMongo(mensaje);
+      io.emit("graphInfo", saveData);
     }
   }
 });

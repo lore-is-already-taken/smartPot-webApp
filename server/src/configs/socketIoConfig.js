@@ -8,7 +8,7 @@ app.use(cors({ origin: "*" }));
 // terminamos de setear el servidor
 
 //
-//
+
 //
 
 // esto para habilitar socket.io
