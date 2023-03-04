@@ -8,3 +8,4 @@ services:
       - ./database:/data/db
     ports: 
       - "27017:27017"
+    mem_limit: 300m

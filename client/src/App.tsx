@@ -7,6 +7,7 @@ import { NavBar } from "./components/NavBar";
 import { AuthGuard, RoleGuard } from "./guards";
 import { PrivateRoutes, PublicRoutes, Roles } from "./models";
 import { DashBoard } from "./pages/private/Dashboard";
+import { SignIn } from "./pages/SignIn";
 import store from "./redux/store";
 import { RoutesWithNotFound } from "./utilities";
 
@@ -27,6 +28,8 @@ function App() {
                 element={<Navigate to={PrivateRoutes.PRIVATE} />}
               />
               <Route path={PublicRoutes.LOGIN} element={<Login />} />
+              <Route path={PublicRoutes.SIGNIN} element={<SignIn />} />
+
               <Route element={<AuthGuard privateValidation={true} />}>
                 <Route
                   path={`${PrivateRoutes.PRIVATE}/*`}

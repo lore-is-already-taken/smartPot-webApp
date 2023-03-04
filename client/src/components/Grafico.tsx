@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import socket from "../config/socket.config";
-import endPoints from "../routes/endpoints";
+import { endPoints } from "../models";
 import "./Grafico.css";
 
 const Grafico: React.FC = () => {
@@ -19,7 +19,7 @@ const Grafico: React.FC = () => {
 
   const getData = async () => {
     await axios
-      .get(`http://localhost:8000/${endPoints.graphData}`)
+      .get(`http://localhost:8000/${endPoints.GRAPHDATA}`)
       .then((response) => {
         setData(response.data);
       });

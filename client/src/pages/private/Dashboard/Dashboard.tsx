@@ -3,7 +3,7 @@ import { Grafico } from "../../../components/Grafico";
 import OutlinedCard from "../../../components/InfoCard";
 import ServoButton from "../../../components/ServoButton";
 import socket from "../../../config/socket.config";
-import endPoints from "../../../routes/endpoints";
+import { endPoints } from "../../../models";
 
 const DashBoard: React.FC<{}> = () => {
   const [humidity, setHumidity] = useState("N/A");
@@ -11,7 +11,7 @@ const DashBoard: React.FC<{}> = () => {
   const [suelo, setSuelo] = useState("N/A");
 
   useEffect(() => {
-    socket.on(endPoints.enviromentData, (data) => {
+    socket.on(endPoints.ENVIROMENTDATA, (data) => {
       setTmp(Number(data.temperature).toFixed(2));
       setHumidity(Number(data.humidity).toFixed(2));
       setSuelo(data.soilMoisture);
