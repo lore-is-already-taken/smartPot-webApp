@@ -1,10 +1,13 @@
 import { IncomingHttpHeaders } from "http";
 import { app, client, io, server } from "./configs";
-import { getMongoData } from "./db/mongo.config";
+import { getMongoData, writeInMongo } from "./db/mongo.config";
+import user from "./routes/user.route";
 import {
   clientEndpoints,
   smartPotEndpoints,
 } from "./utilities/routes.utilities";
+
+app.use(user);
 
 io.on("connection", (socket) => {
   console.log(`user connected with ID: ${socket.id}`);
@@ -28,8 +31,9 @@ client.on("message", (topic, payload) => {
 
     if (WRITE_TIME % 5 === 0 && WRITE_TIME !== LAST_TIME) {
       LAST_TIME = WRITE_TIME;
-      console.log(mensaje);
+      writeInMongo(mensaje);
     }
+  } else {
   }
 });
 
@@ -49,6 +53,15 @@ app.get("/graphdata", async (_req, res) => {
   const response = await getMongoData();
 
   res.send(response);
+});
+
+app.post("/writedata", (req, _res) => {
+  //const response = writeInMongo(req.body);
+  console.log(req.body);
+
+  io.emit(clientEndpoints.ENVIRONMENT_DATA, req.body.data);
+
+  return "hola";
 });
 
 server.listen(8000);

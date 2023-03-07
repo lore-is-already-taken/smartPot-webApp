@@ -5,7 +5,8 @@ import "./App.css";
 import { Logout } from "./components/Logout";
 import { NavBar } from "./components/NavBar";
 import { AuthGuard, RoleGuard } from "./guards";
-import { PrivateRoutes, PublicRoutes, Roles } from "./models";
+import { PrivateRoutes, PublicRoutes } from "./models";
+import { Roles } from "./models";
 import { DashBoard } from "./pages/private/Dashboard";
 import { SignIn } from "./pages/SignIn";
 import store from "./redux/store";
@@ -17,9 +18,9 @@ const Private = lazy(() => import("./pages/private/Private"));
 function App() {
   return (
     <div className="App">
-      <NavBar />
       <Suspense fallback={<h1>cargando</h1>}>
         <Provider store={store}>
+          <NavBar />
           <BrowserRouter>
             <Logout />
             <RoutesWithNotFound>

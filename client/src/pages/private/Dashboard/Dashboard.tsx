@@ -4,6 +4,7 @@ import OutlinedCard from "../../../components/InfoCard";
 import ServoButton from "../../../components/ServoButton";
 import socket from "../../../config/socket.config";
 import { endPoints } from "../../../models";
+import "./Dashboard.css";
 
 const DashBoard: React.FC<{}> = () => {
   const [humidity, setHumidity] = useState("N/A");
@@ -25,7 +26,7 @@ const DashBoard: React.FC<{}> = () => {
   }, [socket]);
 
   return (
-    <div>
+    <div className="DashboardBody">
       <div className="MainView">
         <div className="graficoView">
           <Grafico />

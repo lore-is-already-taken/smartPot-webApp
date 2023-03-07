@@ -15,7 +15,11 @@ const Logout = () => {
     dispatch(resetUser());
   };
 
-  return <Button onClick={logout}>Logout</Button>;
+  return (
+    <div>
+      <Button onClick={logout}>Logout</Button>
+    </div>
+  );
 };
 
 export default Logout;

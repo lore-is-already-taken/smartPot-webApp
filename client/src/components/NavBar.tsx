@@ -14,6 +14,8 @@ import {
   Tooltip,
   Avatar,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { AppStore } from "../redux/store";
 
 const pages = [
   { label: "Dashboard", endpoint: "/dashboard" },
@@ -22,6 +24,8 @@ const pages = [
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
+  const userState = useSelector((store: AppStore) => store.user);
+  console.log(userState);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );

@@ -6,30 +6,55 @@ import "./SignIn.css";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import { UserInfo } from "../../models";
+import { UserInfo, PrivateRoutes } from "../../models";
 import axios from "axios";
+import { userEndpoints } from "../../utilities/enspoints.utility";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createUser } from "../../redux/states/user";
+import { emailRegex, nameRegex, passwordRegex } from "../../utilities";
 
 const SignIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const createUser = async (e: React.FormEvent<HTMLElement>) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const requestCreateUser = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
 
-    const user: UserInfo = {
-      name: name,
-      email: email,
-      password: password,
-    };
-    axios.post("http://localhost:8000/users", user);
+    //checking if the data given by the user is valid
+    if (!emailRegex.test(email)) {
+      alert("Invalid email ");
+    } else if (!passwordRegex.test(password)) {
+      alert("Invalid pasword");
+    } else if (!nameRegex.test(name)) {
+      alert("Invalid name");
+    } else {
+      const user: UserInfo = {
+        name: name,
+        email: email.toLowerCase(),
+        password: password,
+      };
+      const response = await axios.post(userEndpoints.createUser, user);
+      dispatch(createUser(response.data));
+      navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+    }
   };
+
   return (
     <div className="signInComoponent">
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <LockOutlinedIcon />
       </Avatar>
-      <Box component="form" onSubmit={createUser} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={requestCreateUser}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           margin="normal"
           required

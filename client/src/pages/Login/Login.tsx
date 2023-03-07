@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes, PublicRoutes, Roles } from "../../models";
 import { createUser, resetUser, userKey } from "../../redux/states/user";
-import { getMorty } from "../../services";
-import { clearLocalStorage } from "../../utilities";
+import { getMorty, getUser } from "../../services";
+import { clearLocalStorage, emailRegex } from "../../utilities";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "./Login.css";
 
@@ -29,11 +29,20 @@ const Login = () => {
     navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
   }, []);
 
-  const login = async () => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      const result = await getMorty();
-      dispatch(createUser({ ...result, rol: Roles.USER }));
-      navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+      if (emailRegex.test(email)) {
+      }
+      // the email is left in lowercase
+      const user = { email: email.toLowerCase(), password: password };
+      const result = await getUser(user);
+      if (!!result) {
+        dispatch(createUser({ ...result, rol: Roles.USER }));
+        navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
     } catch (e) {}
   };
 
@@ -51,7 +60,7 @@ const Login = () => {
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <LockOutlinedIcon />
       </Avatar>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           required
@@ -74,6 +83,9 @@ const Login = () => {
           type="password"
           id="password"
           autoComplete="current-password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}

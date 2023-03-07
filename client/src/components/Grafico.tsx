@@ -30,8 +30,9 @@ const Grafico: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("graphInfo", (payload) => {
+    socket.on("enviromentData", (payload) => {
       setData((data) => [...data, payload]);
+      console.log(payload);
     });
 
     return () => {
@@ -42,7 +43,7 @@ const Grafico: React.FC = () => {
   }, [socket]);
 
   useEffect(() => {
-    if (data.length >= 400) {
+    if (data.length >= 500) {
       const auxArray = data.map((x) => x);
       auxArray.splice(0, 1);
       setData(auxArray);

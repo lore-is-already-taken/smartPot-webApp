@@ -264,4 +264,7 @@ $RECYCLE.BIN/
 
 cosasParaTenerEnCuenta
 Arduino
+./server/build
+
+
 # End of https://www.toptal.com/developers/gitignore/api/node,react,linux,windows,visualstudiocode,vim

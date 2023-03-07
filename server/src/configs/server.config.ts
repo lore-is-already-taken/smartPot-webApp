@@ -7,6 +7,7 @@ import mqtt from "mqtt";
 const app = express();
 
 app.use(cors({ origin: "*" }));
+app.use(express.json());
 
 //empezamos a configurar el socket
 

@@ -1,1 +1,1 @@
-export { default as getMorty } from "./auth.service";
+export * from "./auth.service";
